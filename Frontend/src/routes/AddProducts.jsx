@@ -43,13 +43,16 @@ const AddProduct = () => {
       fetch("http://localhost:3000/api/seller/addProduct", {
         method: "POST",
         body: formData,
-      }).then((response) => {
-        console.log("Response:", response);
+      })
+      .then((res)=>res.json())
+      .then(data => {
+        console.log("Response:", data);
+        navigate("/");
       }).catch((error) => {
         console.error("Error adding product:", error);
-      });
+        navigate("/addproduct");
+      });     
       
-      navigate("/")
     }
   };
 

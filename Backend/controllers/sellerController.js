@@ -29,7 +29,13 @@ exports.createProduct= async (req,res)=>{
 
     console.log("Product in controller:",product);
     await product.save();
-    res.status(201).json({ message: "Product created successfully" });
+    res.status(201).json({
+      status:'success',
+      data:{
+        product
+      }
+    });
+
   }
   catch(err){
     console.log(err);

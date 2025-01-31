@@ -1,30 +1,64 @@
 const express = require('express');
-
-//this multer for storing the images in the server side. this we are doing here because we need it for only particular route
-const multer=require('multer');
+const multer = require('multer');
 const fs = require("fs");
-const {fileFilter}= require('../utils/file-util');
-const sellerRouter=express.Router();
+const { fileFilter } = require('../utils/file-util');
+const sellerRouter = express.Router();
 
+// Create uploads directory if it doesn't exist
 const uploadDir = "./uploads";
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
+
+// Configure multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./uploads");
   },
-  filename: function (req, file, cb) {
-    cb(null, new Date().toISOString() + "-" + file.originalname);
+  filename: (req, file, cb) => {
+    try {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const sanitizedFilename = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '-');
+      cb(null, `${timestamp}-${sanitizedFilename}`);
+    } catch (error) {
+      cb(new Error('Error processing file name'));
+    }
   },
 });
 
+// Configure multer upload
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  }
+}).single('image');
 
-const {getProfile}=require('../controllers/sellerController');
-const {createProduct}=require('../controllers/sellerController');
+// Wrap multer upload in error handling middleware
+const handleUpload = (req, res, next) => {
+  upload(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ 
+        status: 'error',
+        message: 'File upload error',
+        error: err.message 
+      });
+    } else if (err) {
+      return res.status(500).json({ 
+        status: 'error',
+        message: 'Server error during upload',
+        error: err.message 
+      });
+    }
+    next();
+  });
+};
 
-sellerRouter.get('/profile',getProfile);
+const { getProfile, createProduct } = require('../controllers/sellerController');
 
-sellerRouter.post('/addProduct',multer({storage:storage}).single('image'),createProduct);
+// Routes
+sellerRouter.get('/profile', getProfile);
+sellerRouter.post('/addProduct', handleUpload, createProduct);
 
-module.exports=sellerRouter;
+module.exports = sellerRouter;

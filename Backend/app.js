@@ -9,7 +9,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const mongoose = require("mongoose");
 const sellerRouter = require("./routers/sellerRouter");
-
+const authRouter = require("./routers/authRouter");
 
 
 const app = express();
@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/seller", sellerRouter);
-
+app.use("/api/auth", authRouter);
 app.use(errorHandlers);
 
 const port = process.env.PORT || 3000;
