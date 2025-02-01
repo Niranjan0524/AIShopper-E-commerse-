@@ -1,5 +1,5 @@
 const expressValidator = require("express-validator");
-export const firstNameValidator = expressValidator
+exports.firstNameValidator = expressValidator
   .check("name")
   .notEmpty()
   .withMessage("First Name is required")
@@ -9,7 +9,7 @@ export const firstNameValidator = expressValidator
   .matches(/^[A-Za-z\s]+$/)
   .withMessage("First Name should contain only alphabets");
 
-export const emailValidator = expressValidator
+exports.emailValidator = expressValidator
   .check("email")
   .notEmpty()
   .withMessage("Email is required")
@@ -17,7 +17,7 @@ export const emailValidator = expressValidator
   .withMessage("Please enter a valid email address")
   .normalizeEmail();
 
-export const passwordValidator = expressValidator
+exports.passwordValidator = expressValidator
   .check("password")
   .notEmpty()
   .withMessage("Password is required")
@@ -26,8 +26,8 @@ export const passwordValidator = expressValidator
   .matches(/\d/)
   .withMessage("Password should contain at least one number");
 
-export const userTypeValidator = expressValidator
-  .check("userType")
+exports.userTypeValidator = expressValidator
+  .check("type")
   .trim()
   .notEmpty()
   .withMessage("User Type is required")

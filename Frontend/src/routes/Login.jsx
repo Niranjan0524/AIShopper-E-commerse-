@@ -5,24 +5,39 @@ import { SiFacebook } from "react-icons/si";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+
 
 const Login = () => {
+  const navigate=useNavigate();
+  const [err,setErr]=useState("");
+
   const handleLogin = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    console.log(email, password);
+    
 
     fetch("http://localhost:3000/api/auth/login", {
       method: "POST",
-      body: JSON.stringify({ email, password }),
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ email, password })
     })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        console.log(data.user);
+        if(data.type)
+          navigate("/");
+        else
+          setErr(data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+        setErr("invalid email or password");
       });
   };
 
@@ -33,6 +48,9 @@ const Login = () => {
           <div className="card shadow-lg">
             <div className="card-header text-center bg-primary text-white">
               <h3>Login</h3>
+            </div>
+            <div className="err text-center text-red py-2">
+              {err}
             </div>
             <div className="card-body">
               <form onSubmit={handleLogin}>

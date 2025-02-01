@@ -43,3 +43,17 @@ exports.createProduct= async (req,res)=>{
   };
   
 }
+
+exports.getProducts=async(req,res)=>{
+  try{
+    const products=await Product.find();
+    res.status(200).json({
+      status:'success',
+      products
+    });
+  }
+  catch(err){
+    console.log(err);
+    res.status(500).json({message:'Internal server error'});
+  }
+}

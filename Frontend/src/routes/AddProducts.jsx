@@ -47,7 +47,7 @@ const AddProduct = () => {
       .then((res)=>res.json())
       .then(data => {
         console.log("Response:", data);
-        navigate("/");
+        navigate("/products");
       }).catch((error) => {
         console.error("Error adding product:", error);
         navigate("/addproduct");

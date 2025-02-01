@@ -19,6 +19,7 @@ import ItemDescription from './routes/ItemDescription.jsx';
 import SavedItems from './routes/SavedItems.jsx';
 import Login from './routes/Login.jsx';
 import AddProduct from './routes/AddProducts.jsx';
+import SellerProducts from './routes/SellerProducts.jsx';
 
 const router=createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router=createBrowserRouter([
   {
     path:"/addProduct",
     element:<AddProduct/>
+  },
+  {
+    path:"/products",
+    element:<SellerProducts/>
   }
 
   

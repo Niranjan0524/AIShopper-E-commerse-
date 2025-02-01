@@ -1,0 +1,29 @@
+all about JWT tokens
+
+basically when user logs in we encrypt the user data object and create token out of it and sends back to the client and then check is at every request and responds accordingly.
+
+
+we basicallly send it using headers.
+
+then encrypted will be decrypted on backend side
+
+
+1]
+npm install jsonwebtoken
+
+2]when u made sure the aall credentils are correct then create 
+const token=jwt.sign(
+  {userId:user._id,userType:user.type},
+            process.env.JWT_SECRET,
+            {expiresIn:'1h'}
+        )
+
+
+here 1st parameter must be user details to crete token 
+then  key
+then expiry
+
+
+basically the key which you will create it is used to signn and unsing so it must be safe and secure
+
+now when you send this complete token to the client then it is totally encrypted so is cant be identified

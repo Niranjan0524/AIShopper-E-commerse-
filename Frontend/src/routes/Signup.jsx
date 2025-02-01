@@ -46,7 +46,7 @@ const Signup = () => {
                     navigate('/login');
                 }
                 else{
-                    setError("Registration failed");
+                    setError(data.message);
                     console.log("Registration failed",data.message);
                 }
             })
@@ -54,9 +54,7 @@ const Signup = () => {
         catch(err){
             setError("Registration failed");
             console.log("Registration failed",err);
-        }          
-
-
+        }        
     };
 
     return (

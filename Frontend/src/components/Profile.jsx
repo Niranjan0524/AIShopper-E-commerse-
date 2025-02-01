@@ -12,7 +12,7 @@ const Profile=()=>
           <div class="welcome">
             <h2>Welcome</h2>
             <p>To access account and manage orders</p>
-            <Link to="/loginsignup">
+            <Link to="/signup">
               <button class="login-signup">
                 {" "}
                 <RiLoginBoxLine /> LOGIN / SIGNUP

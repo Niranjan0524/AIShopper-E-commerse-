@@ -1,7 +1,9 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const { firstNameValidator, emailValidator, passwordValidator, userTypeValidator } = require('./validator');
+const jwt = require('jsonwebtoken');
 
+const expressValidator=require('express-validator');
 exports.signup = [
     firstNameValidator,
     emailValidator,
@@ -14,6 +16,7 @@ exports.signup = [
 
          const errors = expressValidator.validationResult(req);
         if (!errors.isEmpty()) {
+            console.log(errors.array());
             return res.status(422).json({
                 success: false,
                 message: errors.array().map((error) => error.msg)
@@ -61,8 +64,30 @@ exports.signup = [
 
 exports.login = async (req, res) => {
 
-    
+    const {email,password}=req.body;
 
-    res.status(200).json({message: 'Login successful'});
+    try{
+        const user=await User.findOne({email});
+
+        if(!user){
+            return res.status(400).json({message:"user not found"});
+        }
+
+        const isMatch=await bcrypt.compare(password,user.password);
+
+        if(!isMatch){
+            return res.status(400).json({message:"Invalid credentials"});
+        }
+
+        const token=jwt.sign({userId:user._id,userType:user.type},
+            process.env.JWT_SECRET,
+            {expiresIn:'1h'}
+        )
+        res.status(200).json({message: 'Login successful',type:user.type,token:token});
+    }
+    catch(err){
+        console.log(error);
+        res.status(500).json({message:"server error"});
+    }
 
 }

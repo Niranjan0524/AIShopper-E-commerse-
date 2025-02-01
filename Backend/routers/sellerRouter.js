@@ -3,6 +3,7 @@ const multer = require('multer');
 const fs = require("fs");
 const { fileFilter } = require('../utils/file-util');
 const sellerRouter = express.Router();
+const {getProducts}=require('../controllers/sellerController');
 
 // Create uploads directory if it doesn't exist
 const uploadDir = "./uploads";
@@ -57,8 +58,10 @@ const handleUpload = (req, res, next) => {
 
 const { getProfile, createProduct } = require('../controllers/sellerController');
 
-// Routes
+
 sellerRouter.get('/profile', getProfile);
 sellerRouter.post('/addProduct', handleUpload, createProduct);
+sellerRouter.get('/products',getProducts);
+
 
 module.exports = sellerRouter;
