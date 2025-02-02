@@ -1,10 +1,21 @@
 import { RiLoginBoxLine } from "react-icons/ri";
-import { HiLogin } from "react-icons/hi";
 import { TbStars } from "react-icons/tb";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {authActions} from '../store/authSlice';
 const Profile=()=>
 {
 
+    const user=useSelector((state)=>state.auth);
+    const navigate=useNavigate();
+    const dispatch=useDispatch();
+    const handleLogout=()=>{
+      dispatch(authActions.logout());
+      navigate('/signup');
+    }
+    
 
     return (
       <>
@@ -12,20 +23,31 @@ const Profile=()=>
           <div class="welcome">
             <h2>Welcome</h2>
             <p>To access account and manage orders</p>
-            <Link to="/signup">
+            {user.isLoggedIn ==='true' ?<Link to="/signup">
               <button class="login-signup">
                 {" "}
                 <RiLoginBoxLine /> LOGIN / SIGNUP
               </button>
-            </Link>
+            </Link>:
+            
+              <button class="btn btn-danger mr-5" onClick={handleLogout}>
+                <RiLoginBoxLine /> Logout
+              </button>
+              }
+            {
+              !user.idLoggedIn && 
+              <button className="btn btn-danger ml-5">
+                Go To Profile
+              </button>
+            }
             <hr />
           </div>
           <ul class="menu">
             <li>Orders</li>
             <li>Wishlist</li>
-            <Link to="/addproduct">
+            { user.userType==='seller' ?<Link to="/addproduct">
               <li>Add Products</li>
-            </Link>
+            </Link>:null}
             <li>Contact Us</li>
             <li class="new-feature">
               Myntra Insider{" "}

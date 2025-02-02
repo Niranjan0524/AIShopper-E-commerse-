@@ -55,7 +55,7 @@ const router=createBrowserRouter([
     element:<AddProduct/>
   },
   {
-    path:"/products",
+    path:"/sellerProducts",
     element:<SellerProducts/>
   }
 
@@ -63,12 +63,12 @@ const router=createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+
     <Provider store={myntraStore}>
 
     <RouterProvider router={router}>
     </RouterProvider>
 
     </Provider>
-  </React.StrictMode>,
+
 )

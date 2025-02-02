@@ -10,7 +10,7 @@ import WishList from "../routes/WishList";
 import WishListSlice from "./WishListSlice";
 import storiesSlice, { storiesAction } from "./Stories";
 import influencersPicSlice from "./InfluencersPIc";
-
+import authSlice from "./authSlice";
 
 
 
@@ -25,6 +25,7 @@ const myntraStore=configureStore({reducer:{
     wishList:WishListSlice.reducer,
     stories:storiesSlice.reducer,
     influencersPic:influencersPicSlice.reducer,
+    auth:authSlice.reducer
 }
 })
 

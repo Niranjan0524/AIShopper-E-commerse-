@@ -7,11 +7,15 @@ import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { authActions } from "../store/authSlice";
 
 const Login = () => {
   const navigate=useNavigate();
   const [err,setErr]=useState("");
+  const dispatch=useDispatch();
+  
+
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -28,10 +32,17 @@ const Login = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        console.log(data.user);
-        if(data.type)
-          navigate("/");
+        console.log(data);        
+        if(data.type){
+          dispatch(authActions.login({
+            token:data.token,
+            userType:data.type
+          }))
+          if(data.type==="customer")
+              navigate("/");
+          else 
+              navigate("/sellerProducts");
+        }
         else
           setErr(data.message);
       })
