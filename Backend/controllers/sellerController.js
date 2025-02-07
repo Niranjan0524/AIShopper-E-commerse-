@@ -9,6 +9,7 @@ exports.getProfile=(req,res)=>{
 exports.createProduct= async (req,res)=>{
   const {name,brand,price,description,category,rating,numReviews}=req.body;
   
+  const sellerId=req.userId;
   if(!req.file){
     return res.status(400).json({message:'Image is required'});
   }
@@ -24,7 +25,8 @@ exports.createProduct= async (req,res)=>{
       category,
       rating,
       imageUrl,
-      numReviews
+      numReviews,
+      seller:sellerId
     });
 
     console.log("Product in controller:",product);

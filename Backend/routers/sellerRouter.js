@@ -57,10 +57,17 @@ const handleUpload = (req, res, next) => {
 };
 
 const { getProfile, createProduct } = require('../controllers/sellerController');
+const { isLoggedIn, isSeller } = require('../middleware/auth');
 
 
 sellerRouter.get('/profile', getProfile);
-sellerRouter.post('/addProduct', handleUpload, createProduct);
+sellerRouter.post(
+  "/addProduct",
+  isLoggedIn,
+  isSeller,
+  handleUpload,
+  createProduct
+);
 sellerRouter.get('/products',getProducts);
 
 

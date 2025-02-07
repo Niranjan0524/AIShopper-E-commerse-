@@ -15,6 +15,7 @@ import { storiesAction } from "../store/Stories.js";
 import {STORIES} from "../data/stories.js"
 import { influencersPicActions } from "../store/InfluencersPIc.js";
 import { INFLUENCERS_PIC } from "../data/InfluencersPic.js";
+import { authActions } from "../store/authSlice.js";
 const FetchItems=()=>{
 
     // const {currentlyFetching,fetchDone}=useSelector((store)=>store.fetchStatus);
@@ -47,6 +48,11 @@ const FetchItems=()=>{
         
 //  }, []); 
 
+    dispatch(authActions.login({
+        isLoggedIn:localStorage.getItem('isLoggedIn') || false,
+        token:localStorage.getItem('token') || null,
+        userType:localStorage.getItem('userType') || null}
+    ));
     dispatch(influencersPicActions.addPic(INFLUENCERS_PIC))
     dispatch(storiesAction.addStory(STORIES));
     dispatch(homeAndLivingActions.addItems(DEFAULT_ITEMS_HOME_LIVING));

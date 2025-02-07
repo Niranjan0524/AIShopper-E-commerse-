@@ -5,18 +5,22 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {authActions} from '../store/authSlice';
+import { useEffect } from "react";
+
 const Profile=()=>
 {
 
     const user=useSelector((state)=>state.auth);
-    const navigate=useNavigate();
-    const dispatch=useDispatch();
-    const handleLogout=()=>{
-      dispatch(authActions.logout());
-      navigate('/signup');
-    }
-    
+  
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const handleLogout = () => {
+      dispatch(authActions.logout());
+      navigate("/signup");
+    };
+
+  
     return (
       <>
         <div class="sidebar hover-box">

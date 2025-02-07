@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useContext } from "react";
+import {useSelector} from 'react-redux';
 const AddProduct = () => {
 
   
@@ -26,6 +27,8 @@ const AddProduct = () => {
     }
   };
 
+  const {token}=useSelector((store)=>store.auth);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!imageError) {
@@ -43,6 +46,9 @@ const AddProduct = () => {
       fetch("http://localhost:3000/api/seller/addProduct", {
         method: "POST",
         body: formData,
+        headers:{
+          Authorization:`Bearer ${token}}`
+        }
       })
       .then((res)=>res.json())
       .then(data => {
@@ -51,7 +57,7 @@ const AddProduct = () => {
       }).catch((error) => {
         console.error("Error adding product:", error);
         navigate("/addproduct");
-      });     
+      });   
       
     }
   };
