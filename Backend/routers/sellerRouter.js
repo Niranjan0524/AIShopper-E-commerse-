@@ -62,9 +62,7 @@ const { isLoggedIn, isSeller } = require('../middleware/auth');
 
 sellerRouter.get('/profile', getProfile);
 sellerRouter.post(
-  "/addProduct",
-  isLoggedIn,
-  isSeller,
+  "/addProduct",  
   handleUpload,
   createProduct
 );

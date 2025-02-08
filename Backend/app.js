@@ -10,7 +10,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const sellerRouter = require("./routers/sellerRouter");
 const authRouter = require("./routers/authRouter");
-
+const { isLoggedIn, isSeller } = require("./middleware/auth");
 
 const app = express();
 
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/seller", sellerRouter);
+app.use("/api/seller", isLoggedIn, isSeller, sellerRouter);
 app.use("/api/auth", authRouter);
 app.use(errorHandlers);
 

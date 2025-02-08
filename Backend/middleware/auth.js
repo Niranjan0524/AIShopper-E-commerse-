@@ -1,29 +1,26 @@
 const jwt=require('jsonwebtoken');
 
-exports.isLoggedIn=  (req,res,next)=>{
-
-  const token=req.headers.authorization.split(' ')[1];
-
-  console.log('Token inside the auth middleware:',token);
-  if(!token){
-    return res.status(401).json({message:'uk unauthorized'});
+exports.isLoggedIn = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ message: "Unauthorized: No token provided" });
   }
 
-  try{
-    const {userId,userType}=jwt.verify(token,process.env.JWT_SECRET);
-    req.userId=userId;
-    req.userType=userType;
-    //basically now usedId and usetype will be stored in request so it can be accessesd by all the file in server side.
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized: No token provided" });
+  }
+
+  try {
+    const { userId, userType } = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = userId;
+    req.userType = userType;
     next();
+  } catch (error) {
+    console.log("Token verification error:", error);
+    return res.status(401).json({ message: "Unauthorized: Invalid token" });
   }
-  catch(err){
-    console.log(err);
-    return res.status(401).json({message:err.message});
-  }
-
- 
-}
-
+};
 
 exports.isSeller=(req,res,next)=>{
   if(req.userType!=='seller'){
@@ -31,7 +28,7 @@ exports.isSeller=(req,res,next)=>{
   }
 
   next();
-}
+};
 
 exports.isCustomer=(req,res,next)=>{
   if(req.userType !== 'customer'){
@@ -39,5 +36,5 @@ exports.isCustomer=(req,res,next)=>{
   }
 
   next();
-}
+};
 

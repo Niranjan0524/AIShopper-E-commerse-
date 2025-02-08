@@ -1,21 +1,29 @@
 import { useEffect,useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { fetchSellerProducts } from "../store/sellerSlice";
 const SellerProducts = () => {
     
-  const [products, setProducts] = useState([]);
 
+  const dispatch=useDispatch();
+  const {products}=useSelector((store)=>store.seller);
 
   useEffect(()=>{
-    fetch("http://localhost:3000/api/seller/products")
-    .then(res=>res.json())
-    .then(data=>{
-      console.log(data);
-      setProducts(data.products);
-    })
-    .catch(err=>{
-      console.error("error in fetching products",err);
-    })
-  },[]);
+    dispatch(fetchSellerProducts());
+  },[])
+
+  // useEffect(()=>{
+  //   fetch("http://localhost:3000/api/seller/products")
+  //   .then(res=>res.json())
+  //   .then(data=>{
+  //     console.log(data);
+  //     setProducts(data.products);
+  //   })
+  //   .catch(err=>{
+  //     console.error("error in fetching products",err);
+  //   })
+  // },[]);
 
   return (
     <>

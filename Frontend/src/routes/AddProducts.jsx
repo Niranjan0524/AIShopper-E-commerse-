@@ -1,64 +1,75 @@
-import React, { useRef, useState } from "react";
+
+
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import {useSelector} from 'react-redux';
+import { useSelector } from "react-redux";
+
 const AddProduct = () => {
-
-  
-  const nameRef = useRef();
-  const brandRef = useRef();
-  const priceRef = useRef();
-  const descriptionRef = useRef();
-  const imageUrlRef = useRef();
-  const categoryRef = useRef();
-  const ratingRef = useRef();
-  const numReviewsRef = useRef();
-
+  const [name, setName] = useState("");
+  const [brand, setBrand] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState(null);
+  const [category, setCategory] = useState("");
+  const [rating, setRating] = useState("");
+  const [numReviews, setNumReviews] = useState("");
   const [imageError, setImageError] = useState("");
+
   const navigate = useNavigate();
+  const { token } = useSelector((store) => store.auth);
 
   const handleImageChange = (e) => {
-    const { value } = e.target;
-    const fileExtension = value.split(".").pop().toLowerCase();
-    if (fileExtension === "jpg" || fileExtension === "png") {
-      setImageError("");
-    } else {
-      setImageError("Image must be a JPG or PNG file.");
+    const file = e.target.files[0];
+    if (file) {
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      if (fileExtension === "jpg" || fileExtension === "png") {
+        setImage(file);
+        setImageError("");
+      } else {
+        setImage(null);
+        setImageError("Image must be a JPG or PNG file.");
+      }
     }
   };
 
-  const {token}=useSelector((store)=>store.auth);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!imageError) {
-      const formData=new FormData();
-      formData.append("name",nameRef.current.value);
-      formData.append("brand",brandRef.current.value);
-      formData.append("price",priceRef.current.value);
-      formData.append("description",descriptionRef.current.value);
-      formData.append("image",imageUrlRef.current.files[0]);
-      formData.append("category",categoryRef.current.value);
-      formData.append("rating",ratingRef.current.value);
-      formData.append("numReviews",numReviewsRef.current.value);
 
+    if (!imageError && image) {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("brand", brand);
+      formData.append("price", price);
+      formData.append("description", description);
+      formData.append("image", image);
+      formData.append("category", category);
+      formData.append("rating", rating);
+      formData.append("numReviews", numReviews);
 
-      fetch("http://localhost:3000/api/seller/addProduct", {
-        method: "POST",
-        body: formData,
-        headers:{
-          Authorization:`Bearer ${token}}`
-        }
-      })
-      .then((res)=>res.json())
-      .then(data => {
+      console.log("Form Data Entries:");
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+      }
+
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/seller/addProduct",
+          {
+            method: "POST",
+            body: formData,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await response.json();
         console.log("Response:", data);
         navigate("/products");
-      }).catch((error) => {
+      } catch (error) {
         console.error("Error adding product:", error);
         navigate("/addproduct");
-      });   
-      
+      }
     }
   };
 
@@ -71,14 +82,19 @@ const AddProduct = () => {
               <h3>Add Product</h3>
             </div>
             <div className="card-body">
-              <form onSubmit={handleSubmit} method="POST" encType="multipart/form-data">
+              <form
+                onSubmit={handleSubmit}
+                method="POST"
+                encType="multipart/form-data"
+              >
                 <div className="form-group mb-3">
                   <label htmlFor="name">Name</label>
                   <input
                     type="text"
                     className="form-control"
                     id="name"
-                    ref={nameRef}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     required
                   />
                 </div>
@@ -88,7 +104,8 @@ const AddProduct = () => {
                     type="text"
                     className="form-control"
                     id="brand"
-                    ref={brandRef}
+                    value={brand}
+                    onChange={(e) => setBrand(e.target.value)}
                     required
                   />
                 </div>
@@ -98,7 +115,8 @@ const AddProduct = () => {
                     type="number"
                     className="form-control"
                     id="price"
-                    ref={priceRef}
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
                     required
                   />
                 </div>
@@ -107,17 +125,17 @@ const AddProduct = () => {
                   <textarea
                     className="form-control"
                     id="description"
-                    ref={descriptionRef}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     required
                   ></textarea>
                 </div>
                 <div className="form-group mb-3">
-                  <label htmlFor="imageUrl">Image </label>
+                  <label htmlFor="imageUrl">Image</label>
                   <input
                     type="file"
                     className="form-control"
                     id="imageUrl"
-                    ref={imageUrlRef}
                     onChange={handleImageChange}
                     required
                   />
@@ -131,7 +149,8 @@ const AddProduct = () => {
                     type="text"
                     className="form-control"
                     id="category"
-                    ref={categoryRef}
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
                     required
                   />
                 </div>
@@ -141,7 +160,8 @@ const AddProduct = () => {
                     type="number"
                     className="form-control"
                     id="rating"
-                    ref={ratingRef}
+                    value={rating}
+                    onChange={(e) => setRating(e.target.value)}
                     required
                   />
                 </div>
@@ -151,7 +171,8 @@ const AddProduct = () => {
                     type="number"
                     className="form-control"
                     id="numReviews"
-                    ref={numReviewsRef}
+                    value={numReviews}
+                    onChange={(e) => setNumReviews(e.target.value)}
                     required
                   />
                 </div>

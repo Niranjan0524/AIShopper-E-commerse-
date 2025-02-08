@@ -41,7 +41,7 @@ const Login = () => {
           if(data.type==="customer")
               navigate("/");
           else 
-              navigate("/sellerProducts");
+              navigate("/products");
         }
         else
           setErr(data.message);
