@@ -27,31 +27,32 @@ const Profile=()=>
           <div class="welcome">
             <h2>Welcome</h2>
             <p>To access account and manage orders</p>
-            {user.isLoggedIn ==='true' ?<Link to="/signup">
-              <button class="login-signup">
-                {" "}
-                <RiLoginBoxLine /> LOGIN / SIGNUP
-              </button>
-            </Link>:
-            
+            {user.isLoggedIn === "true" ? 
+             (
               <button class="btn btn-danger mr-5" onClick={handleLogout}>
                 <RiLoginBoxLine /> Logout
               </button>
-              }
-            {
-              !user.idLoggedIn && 
-              <button className="btn btn-danger ml-5">
-                Go To Profile
-              </button>
-            }
+            ):(
+              <Link to="/signup">
+                <button class="login-signup">
+                  {" "}
+                  <RiLoginBoxLine /> LOGIN / SIGNUP
+                </button>
+              </Link>
+            )}
+            {user.isLoggedIn && (
+              <button className="btn btn-danger ml-5">Go To Profile</button>
+            )}
             <hr />
           </div>
           <ul class="menu">
             <li>Orders</li>
             <li>Wishlist</li>
-            { user.userType==='seller' ?<Link to="/addproduct">
-              <li>Add Products</li>
-            </Link>:null}
+            {user.userType === "seller" ? (
+              <Link to="/addproduct">
+                <li>Add Products</li>
+              </Link>
+            ) : null}
             <li>Contact Us</li>
             <li class="new-feature">
               Myntra Insider{" "}

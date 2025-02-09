@@ -13,10 +13,10 @@ const authslice=createSlice({
     reducers:{
         login:(state,action)=>{
           console.log("inside login",action.payload);
-            state.isLoggedIn=true;
+            state.isLoggedIn=action.payload.isLoggedIn || false;
             state.token=action.payload.token; 
             state.userType=action.payload.userType;
-            localStorage.setItem('isLoggedIn',true);
+            localStorage.setItem('isLoggedIn',state.isLoggedIn);
             localStorage.setItem('token',action.payload.token),
             localStorage.setItem('userType',action.payload.userType)
         },

@@ -35,6 +35,7 @@ const Login = () => {
         console.log(data);        
         if(data.type){
           dispatch(authActions.login({
+            isLoggedIn:true,
             token:data.token,
             userType:data.type
           }))
