@@ -40,10 +40,8 @@ const Profile=()=>
                 </button>
               </Link>
             )}
-            {user.isLoggedIn && (
-              <button className="btn btn-danger ml-5">Go To Profile</button>
-            )}
-            <hr />
+            {user.isLoggedIn ==='true' ? <button className="btn btn-danger ml-5">Go To Profile</button>:null}
+            <hr/>
           </div>
           <ul class="menu">
             <li>Orders</li>

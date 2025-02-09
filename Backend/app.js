@@ -30,7 +30,8 @@ const {errorHandlers} = require("./controllers/errorController");
 
 const url = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@xdb.mjwzy.mongodb.net/${process.env.MONGO_DB_DATABASE}`;
 
-
+//this is how you make images or uploads folder public to the world
+app.use('/uploads',express.static('uploads'))
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

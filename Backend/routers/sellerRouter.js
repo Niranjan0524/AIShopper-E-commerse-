@@ -4,6 +4,7 @@ const fs = require("fs");
 const { fileFilter } = require('../utils/file-util');
 const sellerRouter = express.Router();
 const {getProducts}=require('../controllers/sellerController');
+const {deleteProduct}=require('../controllers/sellerController');
 
 // Create uploads directory if it doesn't exist
 const uploadDir = "./uploads";
@@ -57,7 +58,6 @@ const handleUpload = (req, res, next) => {
 };
 
 const { getProfile, createProduct } = require('../controllers/sellerController');
-const { isLoggedIn, isSeller } = require('../middleware/auth');
 
 
 sellerRouter.get('/profile', getProfile);
@@ -67,6 +67,6 @@ sellerRouter.post(
   createProduct
 );
 sellerRouter.get('/products',getProducts);
-
+sellerRouter.delete('/product/:id',deleteProduct);
 
 module.exports = sellerRouter;
